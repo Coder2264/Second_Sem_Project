@@ -2,6 +2,37 @@
 #include <string.h>
 #include <ctype.h>
 
+//Coded By Pranesh
+char atbash(char ch)
+{
+    if (isalpha(ch))
+    {
+        // Determine the offset based on the case of the character
+        int offset = isupper(ch) ? 'A' : 'a';
+        
+        // Apply the Atbash transformation
+        return 'Z' - (ch - offset);
+    }
+    // Return the character as is if it's not a letter
+    return ch;
+}
+
+void atbashCipher(char* message) 
+{
+    if (message == NULL)
+    {
+        printf("Invalid message.\n");
+        return;
+    }
+    
+    // Process each character in the message
+    for (int i = 0; message[i] != '\0'; i++)
+    {
+        // Apply the Atbash cipher transformation
+        message[i] = atbash(message[i]);
+    }
+}
+
 //Coded by Kamran
 void keyword_cipher(char *message, char *keyword) {
    char mask[26];
@@ -194,7 +225,7 @@ int main() {
     printf("2. Vigenere cipher\n");
     printf("3.ROT13 Cipher\n");
     printf("4.Keyword Cipher\n");
-
+     printf("5.AtbashCipher\n");
     printf("Select one of the above number (for exiting press -1): ");
     scanf("%d", &op);
     if(op==-1){return 0;}
@@ -268,6 +299,14 @@ int main() {
                     keyword_cipher_decode(message,keyword);
                     printf("Decrypted message is %s\n",message);   
                 }
+                break;
+            }
+        case 5:
+            if(met==1){
+                char message[1000];
+                scanf("%s",message);
+                atbashCipher(message);
+                printf("Ciphered message: %s\n", message);
                 break;
             }
         default:
