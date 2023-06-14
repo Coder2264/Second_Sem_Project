@@ -1,6 +1,276 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
 #include <ctype.h>
+
+//Coded By Moulik
+// function to encrypt a message
+char* encryptRailFence(char* text, int key)
+{
+    // calculate the length of the text
+    int len = strlen(text);
+
+    // create the matrix to cipher plain text
+    // key = rows, len = columns
+    char rail[key][len];
+
+    // filling the rail matrix to distinguish filled
+    // spaces from blank ones
+    for (int i = 0; i < key; i++)
+    {
+        for (int j = 0; j < len; j++)
+        {
+            rail[i][j] = '\n';
+        }
+    }
+
+    // to find the direction
+    bool dir_down = false;
+    int row = 0, col = 0;
+
+    for (int i = 0; i < len; i++)
+    {
+        // check the direction of flow
+        // reverse the direction if we've just
+        // filled the top or bottom rail
+        if (row == 0 || row == key - 1)
+        {
+            dir_down = !dir_down;
+        }
+
+        // fill the corresponding alphabet
+        rail[row][col++] = text[i];
+
+        // find the next row using direction flag
+        if (dir_down)
+        {
+            row++;
+        }
+        else
+        {
+            row--;
+        }
+    }
+
+    // now we can construct the cipher using the rail matrix
+    char* result = malloc(len * sizeof(char));
+    int index = 0;
+    for (int i = 0; i < key; i++)
+    {
+        for (int j = 0; j < len; j++)
+        {
+            if (rail[i][j] != '\n')
+            {
+                result[index++] = rail[i][j];
+            }
+        }
+    }
+    result[index] = '\0';
+
+    return result;
+}
+
+// This function receives cipher-text and key
+// and returns the original text after decryption
+char* decryptRailFence(char* cipher, int key)
+{
+    // calculate the length of the cipher text
+    int len = strlen(cipher);
+
+    // create the matrix to cipher plain text
+    // key = rows, len = columns
+    char rail[key][len];
+
+    // filling the rail matrix to distinguish filled
+    // spaces from blank ones
+    for (int i = 0; i < key; i++)
+    {
+        for (int j = 0; j < len; j++)
+        {
+            rail[i][j] = '\n';
+        }
+    }
+
+    // to find the direction
+    bool dir_down;
+    int row = 0, col = 0;
+
+    // mark the places with '*'
+    for (int i = 0; i < len; i++)
+    {
+        // check the direction of flow
+        if (row == 0)
+        {
+            dir_down = true;
+        }
+        if (row == key - 1)
+        {
+            dir_down = false;
+        }
+
+        // place the marker
+        rail[row][col++] = '*';
+
+        // find the next row using direction flag
+        if (dir_down)
+        {
+            row++;
+        }
+        else
+        {
+            row--;
+        }
+    }
+
+    // now we can construct and fill the rail matrix
+    int index = 0;
+    for (int i = 0; i < key; i++)
+    {
+        for (int j = 0; j < len; j++)
+        {
+            if (rail[i][j] == '*' && index < len)
+            {
+                rail[i][j] = cipher[index++];
+            }
+        }
+    }
+
+    // now read the matrix in zig-zag manner to construct
+    // the resultant text
+    char* result = malloc(len * sizeof(char));
+    row = 0;
+    col = 0;
+    index = 0;
+    bool dir_down_decrypt;
+
+    for (int i = 0; i < len; i++)
+    {
+        // check the direction of flow
+        if (row == 0)
+        {
+            dir_down_decrypt = true;
+        }
+        if (row == key - 1)
+        {
+            dir_down_decrypt = false;
+        }
+
+        // place the marker
+        if (rail[row][col] != '*')
+        {
+            result[index++] = rail[row][col++];
+        }
+
+        // find the next row using direction flag
+        if (dir_down_decrypt)
+        {
+            row++;
+        }
+        else
+        {
+            row--;
+        }
+    }
+    result[index] = '\0';
+
+    return result;
+}
+
+void ceaser_en(){
+    char text[500], ch;
+
+    int key;
+
+    // Taking user input.
+    printf("Enter a message to encrypt: ");
+
+    scanf("%s", text);
+
+    printf("Enter the key: ");
+
+    scanf("%d", & key);
+
+    // Visiting character by character.
+
+    for (int i = 0; text[i] != '\0'; ++i) {
+
+        ch = text[i];
+        // Check for valid characters.
+        if (isalnum(ch)) {
+
+            //Lowercase characters.
+            if (islower(ch)) {
+                ch = (ch - 'a' + key) % 26 + 'a';
+            }
+            // Uppercase characters.
+            if (isupper(ch)) {
+                ch = (ch - 'A' + key) % 26 + 'A';
+            }
+
+            // Numbers.
+            if (isdigit(ch)) {
+                ch = (ch - '0' + key) % 10 + '0';
+            }
+        }
+        // Invalid character.
+        else {
+            printf("Invalid Message");
+        }
+
+        // Adding encoded answer.
+        text[i] = ch;
+
+    }
+
+    printf("Encrypted message: %s", text);
+}
+
+void ceaser_d(){
+     char text[500], ch;
+
+    int key;
+
+    // Taking user input.
+
+    printf("Enter a message to decrypt: ");
+
+    scanf("%s", text);
+
+    printf("Enter the key: ");
+
+    scanf("%d", & key);
+
+    // Visiting each character.
+    for (int i = 0; text[i] != '\0'; ++i) {
+
+        ch = text[i];
+        // Check for valid characters.
+        if (isalnum(ch)) {
+            //Lowercase characters.
+            if (islower(ch)) {
+                ch = (ch - 'a' - key + 26) % 26 + 'a';
+            }
+            // Uppercase characters.
+            if (isupper(ch)) {
+                ch = (ch - 'A' - key + 26) % 26 + 'A';
+            }
+            // Numbers.
+            if (isdigit(ch)) {
+                ch = (ch - '0' - key + 10) % 10 + '0';
+            }
+        }
+        // Invalid characters.
+        else {
+            printf("Invalid Message");
+        }
+        // Adding decoded character back.
+        text[i] = ch;
+
+    }
+
+    printf("Decrypted message: %s", text);
+}
 
 //Coded By Pranesh
 char atbash(char ch)
@@ -225,7 +495,9 @@ int main() {
     printf("2. Vigenere cipher\n");
     printf("3.ROT13 Cipher\n");
     printf("4.Keyword Cipher\n");
-     printf("5.AtbashCipher\n");
+    printf("5.AtbashCipher\n");
+    printf("6.Ceaser Cipher\n");
+    printf("7.Rail_Fence \n");
     printf("Select one of the above number (for exiting press -1): ");
     scanf("%d", &op);
     if(op==-1){return 0;}
@@ -254,7 +526,7 @@ int main() {
         case 2:
             if (met == 1) {
                 char key[100];
-                printf("Enter Key: ");
+                printf("Enter Keyword: ");
                 scanf("%s", key);
                 printf("Enter Message: ");
                 char message[100];
@@ -264,7 +536,7 @@ int main() {
                 break;
             } else {
                 char key[100];
-                printf("Enter Key: ");
+                printf("Enter Keyword: ");
                 scanf("%s", key);
                 printf("Enter Message: ");
                 char message[100];
@@ -303,12 +575,58 @@ int main() {
             }
         case 5:
             if(met==1){
-                char message[1000];
-                scanf("%s",message);
-                atbashCipher(message);
-                printf("Ciphered message: %s\n", message);
+                    printf("Enter message for Encryption:");
+                    char message[1000];                       
+                    scanf("%s",message);
+                    printf("Original message: %s\n", message);
+                    //calling of function for encryption
+                    atbashCipher(message);              
+                    printf("Encrypted message: %s\n", message);
+                    break;
+
+            }
+            else
+                {
+                    printf("Enter message for Decryption:");
+                    char message[1000];
+                    scanf("%s",message);
+                    printf("Original message: %s\n", message);
+                    //calling of function for decryption
+                    atbashCipher(message);
+                    printf("Decrypted message: %s\n", message);                        
+                    break;
+                }
+        case 6:
+            if(met==1){
+                ceaser_en();
                 break;
             }
+            else{
+                ceaser_d();
+                break;
+            }
+        case 7:
+            if(met==1){
+                char message[200];
+                int key;
+                printf("Enter Message: ");
+                scanf("%s",message);
+                printf("Enter Key: ");
+                scanf("%d",&key);
+                printf("%s\n",encryptRailFence(message,key));
+                break;
+            }
+            else{
+                char message[200];
+                int key;
+                printf("Enter Key: ");
+                scanf("%d",&key);
+                printf("Enter Message: ");
+                scanf("%s",message);
+                printf("%s\n",decryptRailFence(message,key));
+                break;
+            }
+        
         default:
             printf("Invalid Choice!\n");
             break;
