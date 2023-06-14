@@ -27,6 +27,35 @@ void keyword_cipher(char *message, char *keyword) {
     }
 }
 
+void  keyword_cipher_decode(char *message, char *keyword){
+    char mask[26];
+    int mark[26];
+    for(int i=0;i<26;i++){
+        mark[i]=0;
+    }
+   
+    for(int i=0;i<strlen(keyword);i++){
+        mask[i]=keyword[i];
+        mark[keyword[i]-'a']=1;
+    }
+    int j=strlen(keyword);
+    for(char ch='a';ch<='z';ch++){
+        if(mark[ch-'a']==0){
+            mask[j]=ch;
+            j++;
+            mark[ch-'a']=1;
+        }
+    }
+    for(int k=0;k<strlen(message);k++){
+        for(int i=0;i<26;i++){
+            if(mask[i]==message[k]){
+                char ch='a'+i;
+                message[k]=ch;
+                break;
+            }
+        }
+    }
+}
 
 // Function to apply ROT13 cipher to a single character
 char rot13(char c) {
@@ -236,6 +265,7 @@ int main() {
                     printf("Encrypted message is %s\n",message);
                 }
                 else{
+                    keyword_cipher_decode(message,keyword);
                     printf("Decrypted message is %s\n",message);   
                 }
                 break;
