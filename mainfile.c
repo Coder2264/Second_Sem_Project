@@ -4,6 +4,131 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+//Coded By Parv
+void prime_encrypt(char arr[]){
+    int primenumbers[]={2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719};
+    for(int i=0; arr[i]!='\0';i++){
+        int prime = primenumbers[(int)(arr[i])];
+        if(prime/10==0){
+            printf("A%d",prime);
+        }
+        else if(prime/100==0){
+            printf("B%d",prime);
+        }
+        else if(prime/1000==0){
+            printf("C%d",prime);
+        }
+    }
+    printf("\n");
+}
+void prime_decrypt(char arr[]){
+    int primenumbers[]={2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719};
+    for(int i=0; arr[i]!='\0';i++){
+        if(arr[i]=='A'){
+            int k = (int)(arr[++i]-'0');
+            int j=0;
+            for(j=0; ;j++){
+                if(primenumbers[j]==k){
+                    printf("%c",(char)(j));
+                    break;
+                }
+            }
+            if(j>=128){
+                printf("Wrong encrypted message.\n");
+                return;
+            }
+        }
+        else if(arr[i]=='B'){
+            int k = (int)(arr[++i]-'0')*10;
+            k += (int)(arr[++i]-'0');
+            int j=0;
+            for(j=0; ;j++){
+                if(arr[j]==k){
+                    printf("%c",(char)(j));
+                    break;
+                }
+            }
+            if(j>=128){
+                printf("Wrong encrypted message.\n");
+                return;
+            }
+        }
+        else if(arr[i]=='C'){
+            int k = ((int)(arr[++i]-'0'))*100;
+            k += ((int)(arr[++i]-'0'))*10;
+            k += (int)(arr[++i]-'0');
+            int j=0;
+            for(j=0;j<128 ;j++){
+                if(primenumbers[j]==k){
+                    char c = (char)(j);
+                    printf("%c",c);
+                    break;
+                }
+            }
+            if(j>=128){
+                printf("Wrong encrypted message.\n");
+                return;
+            }
+        }
+        else{
+            printf("Wrong encrypted message.\n");
+            return;
+        }
+    }
+    printf("\n");
+}
+
+
+//Coded By Nishant
+void encodeString(char* str) {
+    int i = 0;
+
+    while (str[i] != '\0') {
+        if (isalpha(str[i])) {
+            if (str[i] == 'z') {
+                str[i] = 'a';
+            } else if (str[i] == 'Z') {
+                str[i] = 'A';
+            } else {
+                str[i] += 1;
+            }
+        } else if (isdigit(str[i])) {
+            if (str[i] == '9') {
+                str[i] = '0';
+            } else {
+                str[i] += 1;
+            }
+        }
+
+        i++;
+    }
+}
+
+void decodeString(char* str) {
+    int i = 0;
+
+    while (str[i] != '\0') {
+        if (isalpha(str[i])) {
+            if (str[i] == 'a') {
+                str[i] = 'z';
+            } else if (str[i] == 'A') {
+                str[i] = 'Z';
+            } else {
+                str[i] -= 1;
+            }
+        } else if (isdigit(str[i])) {
+            if (str[i] == '0') {
+                str[i] = '9';
+            } else {
+                str[i] -= 1;
+            }
+        }
+
+        i++;
+    }
+}
+
+
 //Coded By Moulik
 // function to encrypt a message
 char* encryptRailFence(char* text, int key)
@@ -498,6 +623,8 @@ int main() {
     printf("5.AtbashCipher\n");
     printf("6.Ceaser Cipher\n");
     printf("7.Rail_Fence \n");
+    printf("8.Cipher 8 \n");
+    printf("9.Prime Cipher\n");
     printf("Select one of the above number (for exiting press -1): ");
     scanf("%d", &op);
     if(op==-1){return 0;}
@@ -549,7 +676,7 @@ int main() {
         case 3:
             {
                 char *message;
-                printf("Give Input: ");
+                printf("Enter message: ");
                 scanf("%s",message);
                 rot13_cipher(message);
                 printf("Message: %s",message);
@@ -626,7 +753,35 @@ int main() {
                 printf("%s\n",decryptRailFence(message,key));
                 break;
             }
-        
+        case 8:
+            {
+                char str[100];
+                printf("Enter a string: ");
+                scanf("%s",str);
+                if(met==1){
+                    encodeString(str);
+                    printf("Encoded string: %s", str);
+                }
+                else{
+                    decodeString(str);
+                    printf("Decoded string: %s", str);
+                }
+                break;
+            }
+        case 9:
+            {   char message[1000];
+                if(met==1){
+                    printf("Enter message for Encryption: ");
+                    scanf("%s",message);
+                    prime_encrypt(message);
+                }
+                else{
+                    printf("Enter message for Decryption: ");
+                    scanf("%s",message);
+                    prime_decrypt(message);
+                }
+                break;
+            }
         default:
             printf("Invalid Choice!\n");
             break;
