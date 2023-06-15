@@ -4,6 +4,29 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+//Coded By Love Pathak
+// Function to encrypt the message using XOR cipher
+void encryptxor(char message[], char key[]) {
+    int messageLength = strlen(message);
+    int keyLength = strlen(key);
+    int i;
+
+    for (i = 0; i < messageLength; i++) {
+        message[i] = message[i] ^ key[i % keyLength];
+    }
+}
+
+// Function to decrypt the message using XOR cipher
+void decryptxor(char message[], char key[]) {
+    int messageLength = strlen(message);
+    int keyLength = strlen(key);
+    int i;
+
+    for (i = 0; i < messageLength; i++) {
+        message[i] = message[i] ^ key[i % keyLength];
+    }
+}
+
 //Coded By Parv
 void prime_encrypt(char arr[]){
     int primenumbers[]={2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271, 277, 281, 283, 293, 307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373, 379, 383, 389, 397, 401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463, 467, 479, 487, 491, 499, 503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587, 593, 599, 601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661, 673, 677, 683, 691, 701, 709, 719};
@@ -625,6 +648,7 @@ int main() {
     printf("7.Rail_Fence \n");
     printf("8.Cipher 8 \n");
     printf("9.Prime Cipher\n");
+    printf("10.XOR Cipher\n");
     printf("Select one of the above number (for exiting press -1): ");
     scanf("%d", &op);
     if(op==-1){return 0;}
@@ -779,6 +803,23 @@ int main() {
                     printf("Enter message for Decryption: ");
                     scanf("%s",message);
                     prime_decrypt(message);
+                }
+                break;
+            }
+        case 10:
+            {
+                char message[200],keyword[100];
+                printf("Enter Key: ");
+                scanf("%s",keyword);
+                printf("Enter Message: ");
+                scanf("%s",message);
+                if(met==1){
+                    encryptxor(message,keyword);
+                    printf("Encrypted message is %s\n",message);
+                }
+                else{
+                    decryptxor(message,keyword);
+                    printf("Decrypted message is %s\n",message);   
                 }
                 break;
             }
