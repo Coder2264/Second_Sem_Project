@@ -521,8 +521,9 @@ char rot13(char c) {
 
 // Function to apply ROT13 cipher to a string
 void rot13_cipher(char *str) {
+	int n=strlen(str);
     // Loop through each character in the string
-    for (int i = 0; str[i] != '\0'; i++) {
+    for (int i = 0;i<n ; i++) {
         // Apply ROT13 cipher to the current character
         str[i] = rot13(str[i]);
     }
@@ -561,6 +562,7 @@ void encryptPolybius(char *message) {
             printf("%c", ch);
         }
     }
+    printf("\n");
 }
 
 void decryptPolybius(char *message) {
@@ -592,6 +594,7 @@ void decryptPolybius(char *message) {
             printf("%c%c", message[i], message[i + 1]);
         }
     }
+    printf("\n");
 }
 
 void vigenereEncrypt(char *message, const char *key) {
@@ -699,11 +702,11 @@ int main() {
 
         case 3:
             {
-                char *message;
+                char message[100];
                 printf("Enter message: ");
                 scanf("%s",message);
                 rot13_cipher(message);
-                printf("Message: %s",message);
+                printf("Message: %s\n",message);
                 break;
             }
 
@@ -750,10 +753,12 @@ int main() {
         case 6:
             if(met==1){
                 ceaser_en();
+                printf("\n");
                 break;
             }
             else{
                 ceaser_d();
+                printf("\n");
                 break;
             }
         case 7:
@@ -784,11 +789,11 @@ int main() {
                 scanf("%s",str);
                 if(met==1){
                     encodeString(str);
-                    printf("Encoded string: %s", str);
+                    printf("Encoded string: %s\n", str);
                 }
                 else{
                     decodeString(str);
-                    printf("Decoded string: %s", str);
+                    printf("Decoded string: %s\n", str);
                 }
                 break;
             }
