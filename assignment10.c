@@ -869,7 +869,11 @@ int main() {
                 }
                 break;
             }
-        case 5:
+       case 5:{
+            printf("Welcome to Atbash cipher:\n");
+            printf("Rule-1:Space can't be encoded or decoded so you need to avoid that but in case you need you can use _ .\n");
+            printf("Rule-2:You can use any special charater but it remains as it is during encryption and decryption.\n");
+            printf("For example you have to encode -: HOW ARE YOU? :- then you have to enter HOWAREYOU? .\n");
             if(met==1){
                     printf("Enter message for Encryption:");
                     char message[1000];                       
@@ -892,6 +896,7 @@ int main() {
                     printf("Decrypted message: %s\n", message);                        
                     break;
                 }
+        }
         case 6:
         {
             printf("The Caesar cipher is a simple substitution cipher where each letter in the plaintext is shifted a certain number of positions down the alphabet. It is named after Julius Caesar, who allegedly used this cipher to communicate secretly with his officials.\n\n");
