@@ -156,6 +156,7 @@ void decodeString(char* str) {
 // function to encrypt a message
 char* encryptRailFence(char* text, int key)
 {
+    
     // calculate the length of the text
     int len = strlen(text);
 
@@ -453,26 +454,30 @@ void atbashCipher(char* message)
 
 //Coded by Kamran
 void keyword_cipher(char *message, char *keyword) {
-   char mask[26];
-   int mark[26];
+   char mask[26];           //New alphabet set corresponding to encrypted message
+   int mark[26];            //Checking whether each letter has been assigned or not
    for(int i=0;i<26;i++){
-    mark[i]=0;
+    mark[i]=0;                  //Initially Unassigned
    }
    
     for(int i=0;i<strlen(keyword);i++){
-        mask[i]=keyword[i];
+        mask[i]=keyword[i];             //Now assigning
         mark[keyword[i]-'a']=1;
     }
     int j=strlen(keyword);
     for(char ch='a';ch<='z';ch++){
         if(mark[ch-'a']==0){
-            mask[j]=ch;
+            mask[j]=ch;                 //If unassigned from keyword then assign it from alphabet set
             j++;
             mark[ch-'a']=1;
         }
     }
     for(int i=0;i<strlen(message);i++){
-        message[i]=mask[message[i]-'a'];
+        if(message[i]>='A'&&message[i]<='Z'){
+            message[i]=mask[message[i]-'A']+('A'-'a');
+        }
+        else
+            message[i]=mask[message[i]-'a'];        //Encrypt the message
     }
 }
 
@@ -521,9 +526,8 @@ char rot13(char c) {
 
 // Function to apply ROT13 cipher to a string
 void rot13_cipher(char *str) {
-	int n=strlen(str);
     // Loop through each character in the string
-    for (int i = 0;i<n ; i++) {
+    for (int i = 0; str[i] != '\0'; i++) {
         // Apply ROT13 cipher to the current character
         str[i] = rot13(str[i]);
     }
@@ -562,7 +566,6 @@ void encryptPolybius(char *message) {
             printf("%c", ch);
         }
     }
-    printf("\n");
 }
 
 void decryptPolybius(char *message) {
@@ -594,7 +597,6 @@ void decryptPolybius(char *message) {
             printf("%c%c", message[i], message[i + 1]);
         }
     }
-    printf("\n");
 }
 
 void vigenereEncrypt(char *message, const char *key) {
@@ -604,14 +606,16 @@ void vigenereEncrypt(char *message, const char *key) {
 
     for (i = 0, j = 0; i < messageLen; ++i, ++j) {
         if (j == keyLen)
-            j = 0;
+            j = 0;               //If j reaches the length of the key, reset it to 0 to repeat the key.
 
-        if (isalpha(message[i])) {
-            char base = isupper(message[i]) ? 'A' : 'a';
+        if (isalpha(message[i])) {      //Check if the current character in the message is a letter using isalpha()
+            char base = isupper(message[i]) ? 'A' : 'a';        //determine the base character ('A' or 'a') based on its case (uppercase or lowercase).
             int messageIndex = message[i] - base;
             int keyIndex = toupper(key[j]) - 'A';
 
             message[i] = (messageIndex + keyIndex) % 26 + base;
+
+            //Add the positions of the message and key characters together, modulo 26 to wrap around the alphabet.
         }
     }
 }
@@ -663,6 +667,23 @@ int main() {
 
     switch (op) {
         case 1:
+        {
+
+            printf("The Polybius cipher is a substitution cipher that uses a grid of letters to encode messages.\n");
+            printf("Here's how the Polybius cipher encryption works:\n\n");
+
+            printf("Step 1: Create a 6x6 grid with the following alphabet:\n\n");
+            printf("  A B C D E F\n");
+            printf("  G H I J K L\n");
+            printf("  M N O P Q R\n");
+            printf("  S T U V W X\n");
+            printf("  Y Z 0 1 2 3\n");
+            printf("  4 5 6 7 8 9\n\n");
+
+            printf("Step 2: Iterate over each character in the message to be encrypted.\n");
+            printf("If the character is a letter, find its position in the alphabet grid.\n");
+            printf("If the character is a digit, leave it unchanged.\n");
+            printf("If the character is neither a letter nor a digit, leave it unchanged as well.\n\n");
             if (met == 1) {
                 printf("Enter Message: ");
                 char message[100];
@@ -676,8 +697,49 @@ int main() {
                 decryptPolybius(message);
                 break;
             }
+        }
 
         case 2:
+        {   
+            printf("The Vigenère cipher is a polyalphabetic substitution cipher that uses a keyword to determine the letter substitution.Here we are considering Uppercase and lowercase letters separately\n");
+            printf("Here's how the Vigenère cipher works:\n\n");
+
+            printf("Step 1: Choose a keyword. Let's say the keyword is \"KEYWORD\" (without spaces).\n");
+
+            printf("Step 2: Repeat the keyword to match the length of the plaintext message.\n");
+            printf("For example, if the plaintext is \"HELLO WORLD\", the keyword is repeated to become \"KEYWORDKEYWO\".\n");
+
+            printf("Step 3: Create a Vigenère square, which is a tabular arrangement of the alphabet.\n");
+            printf("The rows and columns of the Vigenère square represent the letters of the alphabet.\n");
+            printf("Each row is shifted one position to the left from the previous row.\n");
+            printf("Here's an example of a Vigenère square:\n\n");
+
+            printf("       A B C D E F G H I J K L M N O P Q R S T U V W X Y Z\n");
+            printf("     ---------------------------------------------------\n");
+            printf("A   | A B C D E F G H I J K L M N O P Q R S T U V W X Y Z\n");
+            printf("B   | B C D E F G H I J K L M N O P Q R S T U V W X Y Z A\n");
+            printf("C   | C D E F G H I J K L M N O P Q R S T U V W X Y Z A B\n");
+            printf("D   | D E F G H I J K L M N O P Q R S T U V W X Y Z A B C\n");
+            printf("... | ...\n");
+            printf("Z   | Z A B C D E F G H I J K L M N O P Q R S T U V W X Y\n\n");
+
+            printf("Step 4: Encrypt the plaintext by substituting each letter with the letter in the Vigenère square.\n");
+            printf("The row of the square is determined by the corresponding letter in the keyword.\n");
+            printf("The column of the square is determined by the letter of the plaintext.\n");
+            printf("The letter at the intersection of the row and column is the ciphertext letter.\n");
+            printf("For example, using the keyword \"KEYWORD\" and the plaintext \"HELLO WORLD\":\n\n");
+
+            printf("Plaintext: HELLOWORLD\n");
+            printf("Keyword:   KEYWORDKEY\n");
+            printf("Ciphertext: RIJHCNRBPB\n\n");
+
+            printf("To decrypt the ciphertext, the same Vigenere square and keyword are used.\n");
+            printf("Instead of the plaintext, the ciphertext is matched with the row of the square.\n");
+            printf("The corresponding letter in the column of the square gives the decrypted letter.\n");
+
+            printf("That's how the Vigenere cipher works. It uses a keyword and a Vigenere square for encryption and decryption, providing a stronger form of substitution cipher compared to simple Caesar ciphers.\n");
+
+
             if (met == 1) {
                 char key[100];
                 printf("Enter Keyword: ");
@@ -699,19 +761,65 @@ int main() {
                 printf("%s\n",message);
                 break;
             }
+        }
 
         case 3:
-            {
-                char message[100];
+            {   printf("The ROT13 cipher is a simple letter substitution cipher that replaces each letter with the letter 13 positions down the alphabet.Here we are considering Uppercase and lowercase letters separately\n");
+                printf("Here's how the ROT13 cipher works:\n\n");
+
+                printf("Step 1: Take a message that you want to encrypt or decrypt.\n");
+
+                printf("Step 2: For each letter in the message, find its corresponding letter by shifting it 13 positions down the alphabet.\n");
+                printf("If the letter is near the end of the alphabet, wrap around to the beginning.\n");
+                printf("For example, 'A' becomes 'N', 'B' becomes 'O', 'C' becomes 'P', and so on.\n");
+
+                printf("Step 3: Leave non-alphabetic characters, such as spaces and punctuation, unchanged.\n\n");
+
+                printf("For example, let's encrypt the message 'HELLO WORLD' using the ROT13 cipher:\n\n");
+
+                printf("Plaintext: HELLO_WORLD\n");
+                printf("Ciphertext: URYYB_JBEYQ\n\n");
+
+                printf("To decrypt the ciphertext, simply apply the same ROT13 cipher again:\n\n");
+
+                printf("Ciphertext: URYYB_JBEYQ\n");
+                printf("Plaintext: HELLO_WORLD\n\n");
+
+                printf("That's how the ROT13 cipher works. It is a simple and symmetric substitution cipher that can be used for basic text encryption and decryption.\n");
+
+                char *message;
                 printf("Enter message: ");
                 scanf("%s",message);
                 rot13_cipher(message);
-                printf("Message: %s\n",message);
+                printf("Message: %s",message);
                 break;
             }
 
         case 4:
-            {
+            {   
+                printf("The keyword cipher is a type of monoalphabetic substitution cipher that uses a keyword to determine the letter substitution.USE ONLY SMALLCASE LETTERS HERE\n.USE KEYWORD WITH DISTINCT LETTERS ONLY\n");
+                printf("Here's how the keyword cipher works:\n\n");
+
+                printf("Step 1: Choose a keyword. Let's say the keyword is \"keyword\" (without spaces).\n");
+
+                printf("Step 2: Remove duplicate letters from the keyword and place the remaining unique letters at the beginning of the alphabet sequence.\n");
+                printf("In this case, the unique letters are \"keyword,\" so the alphabet sequence becomes \"keywordabcfghijlmnpqstuvxz\".\n");
+
+                printf("Step 3: To encrypt a message, substitute each letter of the plaintext with the corresponding letter from the alphabet sequence.\n");
+                printf("Spaces and punctuation marks can not be coded and hence should be avoided.\n\n");
+
+                printf("For example, let's encrypt the message \"hello world\" using the keyword \"keyword\":\n\n");
+
+                printf("The alphabet sequence is: \"keywordabcfghijlmnpqstuvxz\"\n\n");
+
+                printf("Plaintext: helloworld\n");
+                printf("Ciphertext: aoggjujngw\n\n");
+
+                printf("Step 5: To decrypt the ciphertext, the process is reversed.\n");
+                printf("Each letter of the ciphertext is substituted with the corresponding letter from the alphabet sequence, using the same keyword.\n");
+
+                printf("That's how the keyword cipher works. It uses a keyword to create a unique alphabet sequence for encryption and decryption, providing a simple substitution method.\n");
+
                 char message[200],keyword[100];
                 printf("Enter Keyword: ");
                 scanf("%s",keyword);
@@ -751,17 +859,55 @@ int main() {
                     break;
                 }
         case 6:
+        {
+            printf("The Caesar cipher is a simple substitution cipher where each letter in the plaintext is shifted a certain number of positions down the alphabet. It is named after Julius Caesar, who allegedly used this cipher to communicate secretly with his officials.\n\n");
+
+            printf("Here's how the Caesar cipher works with an example:\n\n");
+
+            printf("Let's say we want to encrypt the message \"HELLO\" with a key (shift value) of 3. The first step is to assign numerical values to each letter, typically starting with A = 0, B = 1, and so on.\n\n");
+
+            printf("Plaintext:   H  E  L  L  O\n");
+            printf("Numeric:    7  4  11 11 14\n\n");
+
+            printf("To encrypt each letter, we shift it by the key value. In this case, a shift of 3 means we move each letter three positions to the right in the alphabet.\n\n");
+
+            printf("Encrypted Numeric:    10  7  14 14 1\n");
+            printf("Encrypted Text:       K   H  O  O  R\n\n");
+
+            printf("So, \"HELLO\" becomes \"KHOOR\" when encrypted using the Caesar cipher with a key of 3.\n\n");
+
+            printf("To decrypt the encrypted message, we reverse the process. We take the encrypted text and shift each letter back by the key value to recover the original message.\n\n");
+
+            printf("Decrypted Text:       K   H  O  O  R\n");
+            printf("Decrypted Numeric:    10  7  14 14 1\n");
+            printf("Plaintext:            H   E  L  L  O\n\n");
+
+            printf("The original message \"HELLO\" is restored.\n\n");
+
+            printf("In summary, the Caesar cipher is a substitution cipher that shifts each letter of the plaintext by a fixed number of positions to obtain the corresponding encrypted letter. It is a simple and easy-to-understand encryption technique, but it is also relatively weak and easily breakable with modern cryptographic methods.\n");
             if(met==1){
                 ceaser_en();
-                printf("\n");
                 break;
             }
             else{
                 ceaser_d();
-                printf("\n");
                 break;
             }
+        }
         case 7:
+        {
+            printf("The rail fence cipher (also called a zigzag cipher) is a classical type of transposition cipher.\nIt derives its name from the manner in which encryption is performed, in analogy to a fence built with horizontal rails.\n");
+            printf("-> In the rail fence cipher, the plain-text is written downwards and diagonally on successive rails of an imaginary fence.\n");
+            printf("-> When we reach the bottom rail, we traverse upwards moving diagonally, after reaching the top rail, the direction is changed again. Thus the alphabets of the message are written in a zig-zag manner.\n");
+            printf("-> After each alphabet has been written, the individual rows are combined to obtain the cipher-text.\n\n");
+
+            printf("In this cipher, the plaintext is written downwards diagonally on successive \"rails\" of an imaginary fence, then moving up when the bottom rail is reached, down again when the top rail is reached, and so on until the whole plaintext is written out. The ciphertext is then read off in rows.\n\n");
+            printf("For example, to encrypt the message 'WE ARE DISCOVERED. RUN AT ONCE.' with 3 \"rails\", write the text as:\n\n");
+            printf("W . . . E . . . C . . . R . . . U . . . O . . .\n");
+            printf(". E . R . D . S . O . E . E . R . N . T . N . E\n");
+            printf(". . A . . . I . . . V . . . D . . . A . . . C .\n\n");
+            printf("(Note that spaces and punctuation are omitted.) Then read off the text horizontally to get the ciphertext:\n\n");
+            printf("WECRUO ERDSOEERNTNE AIVDAC\n");
             if(met==1){
                 char message[200];
                 int key;
@@ -782,6 +928,7 @@ int main() {
                 printf("%s\n",decryptRailFence(message,key));
                 break;
             }
+        }
         case 8:
             {
                 char str[100];
@@ -789,11 +936,11 @@ int main() {
                 scanf("%s",str);
                 if(met==1){
                     encodeString(str);
-                    printf("Encoded string: %s\n", str);
+                    printf("Encoded string: %s", str);
                 }
                 else{
                     decodeString(str);
-                    printf("Decoded string: %s\n", str);
+                    printf("Decoded string: %s", str);
                 }
                 break;
             }
