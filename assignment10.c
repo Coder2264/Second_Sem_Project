@@ -3,6 +3,42 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include<math.h>
+
+//Codede by Nirjay  //Roll-2201AI26 
+void encodeStringToBinary(const char* str) {
+    int length = strlen(str);
+
+    for (int i = 0; i < length; i++) {
+        char ch = str[i];
+        for (int j = 7; j >= 0; j--) {
+            int bit = (ch >> j) & 1;
+            printf("%d", bit);
+        }
+        printf(" ");
+    }
+
+    printf("\n");
+}
+void binaryToOriginal( char* binary) {
+    int length = strlen(binary);
+    int value = 0;
+
+    for (int i = length - 1; i >= 0; i--) {
+        if (binary[i] == '1') {
+            value += pow(2, length - 1 - i);
+        }
+    }
+    printf("Original value: %c\n", value);
+}
+
+void binaryArrayToOriginal(char binaryArray[][40], int size) {
+    for (int i = 0; i < size; i++) {
+         char* binary = binaryArray[i];
+        binaryToOriginal(binary);
+    }
+}
+
 
 //Coded By Love Pathak
 // Function to encrypt the message using XOR cipher
@@ -654,6 +690,7 @@ int main() {
     printf("8.Cipher 8 \n");
     printf("9.Prime Cipher\n");
     printf("10.XOR Cipher\n");
+    printf("11.BinaryConvert Cipher\n");
     printf("Select one of the above number (for exiting press -1): ");
     scanf("%d", &op);
     if(op==-1){return 0;}
@@ -972,6 +1009,32 @@ int main() {
                 }
                 break;
             }
+
+        case 11: 
+        {
+
+            if(met==1){
+            char encode[10];
+            printf("Enter the string that you want to Encode\n");
+            scanf("%s",encode);
+            encodeStringToBinary(encode);}
+            
+
+            else{
+            printf("Please Enter the Size of Binary Numbers\n");
+            int n;
+            scanf("%d",&n);
+
+            char decode[n][40];
+             printf("Please Enter the Binary Numbers to Decode\n");
+            for(int i=0;i<n;i++){
+            scanf("%s",decode[i]);
+            }
+            binaryArrayToOriginal(decode,n);
+            }
+            break;
+
+        }   
         default:
             printf("Invalid Choice!\n");
             break;
