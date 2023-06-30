@@ -3,10 +3,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include<math.h>
+#include <math.h>
 
 //Codede by Nirjay  //Roll-2201AI26 
-void encodeStringToBinary(const char* str) {
+/*void encodeStringToBinary(const char* str) {
     int length = strlen(str);
 
     for (int i = 0; i < length; i++) {
@@ -37,7 +37,7 @@ void binaryArrayToOriginal(char binaryArray[][40], int size) {
          char* binary = binaryArray[i];
         binaryToOriginal(binary);
     }
-}
+}*/
 
 
 //Coded By Love Pathak
@@ -599,6 +599,7 @@ void encryptPolybius(char *message) {
             printf("%c", ch);
         }
     }
+    printf("\n");
 }
 
 void decryptPolybius(char *message) {
@@ -630,6 +631,7 @@ void decryptPolybius(char *message) {
             printf("%c%c", message[i], message[i + 1]);     //If character is symbol
         }
     }
+    printf("\n");
 }
 
 void vigenereEncrypt(char *message, const char *key) {
@@ -704,7 +706,7 @@ int main() {
         case 1:
         {
 
-            printf("The Polybius cipher is a substitution cipher that uses a grid of letters to encode messages.\n");
+            printf("The Polybius cipher is a substitution cipher that uses a grid of letters to encode messages.Please use two special characters consecutively only.\n");
             printf("Here's how the Polybius cipher encryption works:\n\n");
 
             printf("Step 1: Create a 6x6 grid with the following alphabet:\n\n");
@@ -821,11 +823,11 @@ int main() {
 
                 printf("That's how the ROT13 cipher works. It is a simple and symmetric substitution cipher that can be used for basic text encryption and decryption.\n");
 
-                char *message;
+                char message[1000];
                 printf("Enter message: ");
                 scanf("%s",message);
                 rot13_cipher(message);
-                printf("Message: %s",message);
+                printf("Message after Processing : %s\n",message);
                 break;
             }
 
@@ -1015,7 +1017,7 @@ int main() {
                 break;
             }
 
-        case 11: 
+        /*case 11: 
         {
 
             if(met==1){
@@ -1039,7 +1041,7 @@ int main() {
             }
             break;
 
-        }   
+        }  */ 
         default:
             printf("Invalid Choice!\n");
             break;
